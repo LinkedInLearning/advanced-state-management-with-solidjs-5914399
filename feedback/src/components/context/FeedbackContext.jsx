@@ -41,8 +41,29 @@ export function FeedbackProvider(props) {
     }
   };
 
+  // Function to delete feedback by ID
+  const deleteFeedback = async (id) => {
+    if (window.confirm("Are you sure you want to delete this feedback?")) {
+      try {
+        const res = await fetch(`http://localhost:4500/feedback/${id}`, {
+          method: "DELETE",
+        });
+        if (res.ok) {
+          setState("feedback", (feedback) =>
+            feedback.filter((f) => f.id !== id)
+          ); // Remove deleted feedback from state
+        } else {
+          console.error("Failed to delete feedback");
+        }
+      } catch (error) {
+        console.error("Failed to delete feedback:", error);
+      }
+    }
+  };
+
+
   return (
-    <FeedbackContext.Provider value={{ state, addFeedback }}>
+    <FeedbackContext.Provider value={{ state, addFeedback, deleteFeedback }}>
       {props.children}
     </FeedbackContext.Provider>
   );
