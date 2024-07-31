@@ -1,4 +1,13 @@
-function Rating() {
+import { createSignal } from "solid-js";
+
+function Rating({ ratingState }) {
+  const [selected, setSelected] = createSignal(8);
+
+  const handleSelect = (e) => {
+    const newValue = +e.currentTarget.value;
+    setSelected(newValue);
+    ratingState(newValue);
+  };
 
   return (
     <ul className="rating">
@@ -6,8 +15,11 @@ function Rating() {
         <li>
           <input
             type="radio"
+            id={`num${num}`}
             name="rating"
             value={num}
+            onChange={handleSelect}
+            checked={selected() === num}
           />
           <label for={`num${num}`}>{num}</label>
         </li>
